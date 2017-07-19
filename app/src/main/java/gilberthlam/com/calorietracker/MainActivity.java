@@ -1,23 +1,13 @@
 package gilberthlam.com.calorietracker;
 
-import android.app.Dialog;
-import android.app.DialogFragment;
-import android.app.Fragment;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
-import android.app.SearchManager;
 import android.content.ActivityNotFoundException;
-import android.content.DialogInterface;
+import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.speech.RecognizerIntent;
 import android.speech.tts.TextToSpeech;
 import android.support.v4.app.FragmentActivity;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -25,22 +15,21 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.TwoLineListItem;
-
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
-import com.google.android.gms.appindexing.Action;
-import com.google.android.gms.appindexing.AppIndex;
-import com.google.android.gms.appindexing.Thing;
-import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileDescriptor;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
@@ -50,6 +39,7 @@ import static android.provider.ContactsContract.CommonDataKinds.Website.URL;
 
 public class MainActivity extends FragmentActivity {
     protected static final int RESULT_SPEECH = 1;
+    static Context context;
     TextToSpeech tts;
     Model model;
     Day currentDay;
@@ -66,7 +56,8 @@ public class MainActivity extends FragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        model = new Model();
+        MainActivity.context = getApplicationContext();
+        loadData();
         currentDay = model.getToday();
         ArrayAdapter<String> adapter;
         listView = (ListView) findViewById(R.id.listView);
@@ -91,6 +82,7 @@ public class MainActivity extends FragmentActivity {
                 Log.i("food",selectedFood.getName());
 
                 d.show(getFragmentManager(),"");
+                saveData();
 
 
                 return true;
@@ -151,11 +143,18 @@ public class MainActivity extends FragmentActivity {
 
                                         listView.setAdapter(adbFood);
                                         calories.setText("" + currentDay.calculateTotalCalories());
+                                        saveData();
                                     } catch (ArrayIndexOutOfBoundsException e) {
                                         Toast t = Toast.makeText(getApplicationContext(),
                                                 "Sorry! We couldn't find the calorie information! Try to add it manually instead.",
                                                 Toast.LENGTH_SHORT);
                                         t.show();
+                                        currentDay.getListOfFoods().add(new Foods("",0));
+                                        selectedFood = currentDay.getListOfFoods().get(currentDay.getListOfFoods().size()-1);
+                                        Log.i("food",selectedFood.getName());
+
+                                        d.show(getFragmentManager(),"");
+                                        saveData();
                                     }
                                 }
                             }, new Response.ErrorListener() {
@@ -176,6 +175,37 @@ public class MainActivity extends FragmentActivity {
         selectedDay.addFood(selectedFood);
     }
 
+    public void saveData() {
+        try {
+            FileOutputStream fos = MainActivity.context.openFileOutput("data.ct", Context.MODE_PRIVATE);
+            ObjectOutputStream os = new ObjectOutputStream(fos);
+            os.writeObject(model);
+            os.close();
+            fos.close();
+            loadData();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void loadData(){
+        try {
+            FileInputStream fis = MainActivity.context.openFileInput("data.ct");
+            ObjectInputStream is = new ObjectInputStream(fis);
+            model = (Model) is.readObject();
+            is.close();
+            fis.close();
+            this.recreate();
+            Log.i("Load","LOAD SUCCESSFUL");
+
+        }catch(IOException e){
+            e.printStackTrace();
+        }catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
     public void loadedDialog(){
         d.setSelectedDay(currentDay);
         d.setFood(selectedFood);

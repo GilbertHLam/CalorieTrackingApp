@@ -1,5 +1,16 @@
 package gilberthlam.com.calorietracker;
 
+import android.app.Activity;
+import android.content.Context;
+import android.util.Log;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -7,7 +18,7 @@ import java.util.Date;
  * Created by Gilbert Lam on 2017-07-17.
  */
 
-public class Model {
+public class Model implements Serializable{
     ArrayList<Day> listOfDays;
     Date currentDate;
     public Model(){
@@ -39,4 +50,6 @@ public class Model {
     public Day getToday(){
         return listOfDays.get(listOfDays.size()-1);
     }
+
+
 }

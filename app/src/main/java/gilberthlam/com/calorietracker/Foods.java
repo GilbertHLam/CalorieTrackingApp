@@ -1,10 +1,12 @@
 package gilberthlam.com.calorietracker;
 
+import java.io.Serializable;
+
 /**
  * Created by Gilbert Lam on 2017-07-16.
  */
 
-public class Foods {
+public class Foods implements Serializable{
     private int calorie;
     private String name;
     public Foods(String name, int calorie) {

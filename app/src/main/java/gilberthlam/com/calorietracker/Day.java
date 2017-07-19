@@ -1,7 +1,12 @@
 package gilberthlam.com.calorietracker;
 
+import android.content.Context;
 import android.util.Log;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -41,6 +46,12 @@ public class Day implements Serializable{
     public void addFood(Foods item){
         listOfFoods.add(item);
     }
+
+
+
+
+
+
 
 
 
