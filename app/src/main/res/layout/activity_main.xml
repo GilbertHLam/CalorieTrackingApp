@@ -22,38 +22,6 @@
         android:layout_alignEnd="@+id/dateLabel"
         android:textSize="18sp" />
 
-    <TextView
-        android:text="July 7 2017"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/dateLabel"
-        android:layout_centerHorizontal="true"
-        android:textSize="24sp" />
-
-    <Button
-        android:text="Previous"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        style="@style/Widget.AppCompat.Button.Small"
-        android:layout_alignBaseline="@+id/dateLabel"
-        android:layout_alignBottom="@+id/dateLabel"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:background="@android:color/transparent"
-        android:id="@+id/button2" />
-
-    <Button
-        android:text="Next"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/button3"
-        android:background="@android:color/transparent"
-        style="@style/Widget.AppCompat.Button.Small"
-        android:layout_alignBaseline="@+id/dateLabel"
-        android:layout_alignBottom="@+id/dateLabel"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
-
     <Button
         android:text="+"
         android:layout_width="wrap_content"
@@ -64,8 +32,8 @@
         android:layout_alignBottom="@+id/totalCalLabel"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_alignLeft="@+id/button3"
-        android:layout_alignStart="@+id/button3" />
+        android:layout_alignLeft="@+id/nextButton"
+        android:layout_alignStart="@+id/nextButton" />
 
     <TextView
         android:text="Total Calories: "
@@ -83,10 +51,56 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/listView"
-        android:layout_below="@+id/dateLabel"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:background="@android:color/transparent"
-        android:layout_above="@+id/addButton" />
+        android:layout_above="@+id/addButton"
+        android:layout_below="@+id/backButton" />
+
+    <Button
+        android:text="Previous"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/Widget.AppCompat.Button.Small"
+        android:background="@android:color/transparent"
+        android:id="@+id/backButton"
+        android:layout_alignBaseline="@+id/dateLabel"
+        android:layout_alignBottom="@+id/dateLabel"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <Button
+        android:text="Next"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/nextButton"
+        android:background="@android:color/transparent"
+        style="@style/Widget.AppCompat.Button.Small"
+        android:layout_alignBaseline="@+id/dateLabel"
+        android:layout_alignBottom="@+id/dateLabel"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:text="July 7 2017"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/dateLabel"
+        android:textSize="24sp"
+        android:layout_marginTop="56dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/logo"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/imageButton"
+        android:layout_above="@+id/backButton"
+        android:adjustViewBounds="false"
+        android:scaleType="fitCenter"
+        android:background="@android:color/transparent" />
 
 </RelativeLayout>

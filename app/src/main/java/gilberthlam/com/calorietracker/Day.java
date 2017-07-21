@@ -47,6 +47,10 @@ public class Day implements Serializable{
         listOfFoods.add(item);
     }
 
+    public boolean equals(Object otherDay){
+        return((Day)otherDay).getDate().equals(getDate());
+    }
+
 
 
 

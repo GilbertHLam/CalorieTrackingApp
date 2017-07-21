@@ -29,6 +29,8 @@ public class Model implements Serializable{
         }
     }
 
+
+
     public boolean newDay(Date currentDate){
         if (listOfDays.size() == 0){
             listOfDays.add(new Day());
@@ -37,6 +39,10 @@ public class Model implements Serializable{
             return true;
         }
         return false;
+    }
+
+    public void addDay(){
+        listOfDays.add(new Day());
     }
 
     public Day getSelectedDay(Date targetDate){

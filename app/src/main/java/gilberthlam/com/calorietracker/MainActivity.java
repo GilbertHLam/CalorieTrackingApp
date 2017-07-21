@@ -32,6 +32,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -49,24 +50,62 @@ public class MainActivity extends FragmentActivity {
     TextView date;
     TextView calories;
     DialogEdit d = new DialogEdit();
+    Button previous;
+    Button next;
     Foods selectedFood;
     AdapterFood adbFood;
+    ArrayList<Foods> myListItems;
+    Day todaysDate;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         MainActivity.context = getApplicationContext();
-        loadData();
-        currentDay = model.getToday();
+        todaysDate = new Day();
         ArrayAdapter<String> adapter;
         listView = (ListView) findViewById(R.id.listView);
         date = (TextView) findViewById(R.id.dateLabel);
         calories = (TextView) findViewById(R.id.totalCalLabel);
+        loadData();
+        currentDay = model.getToday();
 
+
+        previous = (Button) findViewById(R.id.backButton);
+        next = (Button) findViewById(R.id.nextButton);
+        if(!todaysDate.getDate().equals(currentDay.getDate())){
+            model.addDay();
+            saveData();
+            editInfo();
+        }
+        verifyButtonVisibility();
+
+
+        previous.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.i("currentday prev", ""+model.listOfDays.indexOf(currentDay));
+                currentDay  = model.listOfDays.get(model.listOfDays.indexOf(currentDay)-1);
+                Log.i("currentday prev", ""+model.listOfDays.indexOf(currentDay));
+                loadData();
+                editInfo();
+                verifyButtonVisibility();
+            }
+        });
+        next.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.i("currentday prev", ""+model.listOfDays.indexOf(currentDay));
+                currentDay  = model.listOfDays.get(model.listOfDays.indexOf(currentDay)+1);
+                Log.i("currentday prev", ""+model.listOfDays.indexOf(currentDay));
+                loadData();
+                editInfo();
+                verifyButtonVisibility();
+            }
+        });
         date.setText(currentDay.getDate());
 
-        ArrayList<Foods> myListItems = currentDay.listOfFoods;
+        myListItems = currentDay.listOfFoods;
         adbFood = new AdapterFood(this, 0, myListItems);
         listView.setAdapter(adbFood);
 
@@ -82,7 +121,7 @@ public class MainActivity extends FragmentActivity {
                 Log.i("food",selectedFood.getName());
 
                 d.show(getFragmentManager(),"");
-                saveData();
+
 
 
                 return true;
@@ -139,7 +178,7 @@ public class MainActivity extends FragmentActivity {
                                         int caloriesTemp = Integer.parseInt(response);
                                         String tempFood = foodName;
                                         //Adding food today!
-                                        addFood(model.getToday(), new Foods(tempFood, caloriesTemp));
+                                        addFood(currentDay, new Foods(tempFood, caloriesTemp));
 
                                         listView.setAdapter(adbFood);
                                         calories.setText("" + currentDay.calculateTotalCalories());
@@ -154,7 +193,7 @@ public class MainActivity extends FragmentActivity {
                                         Log.i("food",selectedFood.getName());
 
                                         d.show(getFragmentManager(),"");
-                                        saveData();
+
                                     }
                                 }
                             }, new Response.ErrorListener() {
@@ -182,7 +221,6 @@ public class MainActivity extends FragmentActivity {
             os.writeObject(model);
             os.close();
             fos.close();
-            loadData();
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -191,26 +229,63 @@ public class MainActivity extends FragmentActivity {
     }
 
     public void loadData(){
+        FileInputStream fis = null;
         try {
-            FileInputStream fis = MainActivity.context.openFileInput("data.ct");
-            ObjectInputStream is = new ObjectInputStream(fis);
-            model = (Model) is.readObject();
-            is.close();
-            fis.close();
-            this.recreate();
-            Log.i("Load","LOAD SUCCESSFUL");
+            fis = MainActivity.context.openFileInput("data.ct");
+            try {
+                ObjectInputStream is = new ObjectInputStream(fis);
+                model = (Model) is.readObject();
+                is.close();
+                fis.close();
 
-        }catch(IOException e){
-            e.printStackTrace();
-        }catch (ClassNotFoundException e) {
-            e.printStackTrace();
+
+
+                Log.i("Load","LOAD SUCCESSFUL");
+                for(int i = 0; i < model.listOfDays.size();i++) {
+                    Log.i("Daysize", model.listOfDays.get(i).getDate());
+                    for (int x = 0; x < model.listOfDays.get(i).listOfFoods.size(); x++) {
+                        Log.i("Dayfood", model.listOfDays.get(i).getDate()+":"+model.listOfDays.get(i).getListOfFoods().get(x).getName());
+                    }
+                }
+
+            }catch(IOException e) {
+                e.printStackTrace();
+            }catch (ClassNotFoundException e) {
+                model = new Model();
+            }
+        }catch (FileNotFoundException e) {
+            model = new Model();
+            Log.i("Load","NEW");
+
         }
+
     }
     public void loadedDialog(){
         d.setSelectedDay(currentDay);
         d.setFood(selectedFood);
     }
 
+    public void editInfo(){
+        myListItems = currentDay.listOfFoods;
+        adbFood = new AdapterFood(this, 0, myListItems);
+        listView.setAdapter(adbFood);
+        date.setText(currentDay.getDate());
+        calories.setText("" + currentDay.calculateTotalCalories());
+    }
 
+    public void verifyButtonVisibility(){
+        if(model.listOfDays.indexOf(currentDay) == 0) {
+            previous.setVisibility(View.INVISIBLE);
+        }
+        else {
+            previous.setVisibility(View.VISIBLE);
+        }
+        if(model.listOfDays.indexOf(currentDay) == (model.listOfDays.size()-1)) {
+            next.setVisibility(View.INVISIBLE);
+        }
+        else {
+            next.setVisibility(View.VISIBLE);
+        }
+    }
 
 }

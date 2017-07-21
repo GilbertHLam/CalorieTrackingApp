@@ -42,6 +42,7 @@ public class DialogEdit extends DialogFragment {
                         selectedFood.setCalorie(Integer.parseInt(cals.getText().toString()));
                         ((MainActivity) main).listView.setAdapter(((MainActivity) main).adbFood);
                         ((MainActivity) main).calories.setText("" + ((MainActivity) main).currentDay.calculateTotalCalories());
+                        ((MainActivity) main).saveData();
                     }
                 });
                 builder.setNegativeButton("Delete", new DialogInterface.OnClickListener() {
@@ -50,6 +51,7 @@ public class DialogEdit extends DialogFragment {
                         ((MainActivity) main).adbFood.notifyDataSetChanged();
                         ((MainActivity) main).listView.setAdapter(((MainActivity) main).adbFood);
                         ((MainActivity) main).calories.setText("" + ((MainActivity) main).currentDay.calculateTotalCalories());
+                        ((MainActivity) main).saveData();
                         DialogEdit.this.getDialog().cancel();
                     }
                 });
