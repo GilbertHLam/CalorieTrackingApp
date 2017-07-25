@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">CalorieTracker</string>
+    <string name="exercisePrompt">Level of exercise</string>
 </resources>

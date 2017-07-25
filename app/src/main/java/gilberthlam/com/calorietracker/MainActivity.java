@@ -8,6 +8,8 @@ import android.speech.tts.TextToSpeech;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -39,10 +41,13 @@ import java.util.Locale;
 import static android.provider.ContactsContract.CommonDataKinds.Website.URL;
 
 public class MainActivity extends FragmentActivity {
+    private GestureDetector gestureDetector;
+    View.OnTouchListener gestureListener;
+    Intent go;
     protected static final int RESULT_SPEECH = 1;
     static Context context;
     TextToSpeech tts;
-    Model model;
+    static Model model;
     Day currentDay;
     ArrayAdapter<String> adapter;
     ListView listView;
@@ -146,7 +151,13 @@ public class MainActivity extends FragmentActivity {
                 }
             }
         });
-
+        gestureDetector = new GestureDetector(new SwipeGestureDetector());
+        gestureListener = new View.OnTouchListener() {
+            public boolean onTouch(View v, MotionEvent event) {
+                return gestureDetector.onTouchEvent(event);
+            }
+        };
+        listView.setOnTouchListener(gestureListener);
 
     }
 
@@ -214,7 +225,7 @@ public class MainActivity extends FragmentActivity {
         selectedDay.addFood(selectedFood);
     }
 
-    public void saveData() {
+    public static void saveData() {
         try {
             FileOutputStream fos = MainActivity.context.openFileOutput("data.ct", Context.MODE_PRIVATE);
             ObjectOutputStream os = new ObjectOutputStream(fos);
@@ -249,14 +260,13 @@ public class MainActivity extends FragmentActivity {
                 }
 
             }catch(IOException e) {
-                e.printStackTrace();
+                model = new Model();
             }catch (ClassNotFoundException e) {
                 model = new Model();
             }
         }catch (FileNotFoundException e) {
             model = new Model();
             Log.i("Load","NEW");
-
         }
 
     }
@@ -288,4 +298,54 @@ public class MainActivity extends FragmentActivity {
         }
     }
 
+    private void onLeftSwipe() {
+        Toast t = Toast.makeText(MainActivity.this, "Left swipe", Toast.LENGTH_LONG);
+        t.show();
+        go = new Intent("test.apps.FLORA");
+        startActivity(go);
+    }
+
+    private void onRightSwipe() {
+        Toast t = Toast.makeText(MainActivity.this, "Right swipe", Toast.LENGTH_LONG);
+        t.show();
+        go = new Intent(this, Profile.class);
+        go.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(go);
+        finish();
+    }
+
+    private class SwipeGestureDetector extends GestureDetector.SimpleOnGestureListener {
+        private static final int SWIPE_MIN_DISTANCE = 50;
+        private static final int SWIPE_MAX_OFF_PATH = 200;
+        private static final int SWIPE_THRESHOLD_VELOCITY = 200;
+
+        @Override
+        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
+                               float velocityY) {
+            try {
+                float diffAbs = Math.abs(e1.getY() - e2.getY());
+                float diff = e1.getX() - e2.getX();
+
+                if (diffAbs > SWIPE_MAX_OFF_PATH)
+                    return false;
+
+                // Left swipe
+                if (diff > SWIPE_MIN_DISTANCE
+                        && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
+                    MainActivity.this.onLeftSwipe();
+                }
+                // Right swipe
+                else if (-diff > SWIPE_MIN_DISTANCE
+                        && Math.abs(velocityX) > SWIPE_THRESHOLD_VELOCITY) {
+                    MainActivity.this.onRightSwipe();
+                }
+            } catch (Exception e) {
+                Log.e("Home", "Error on gestures");
+            }
+            return false;
+        }
+
+    }
+
 }
+

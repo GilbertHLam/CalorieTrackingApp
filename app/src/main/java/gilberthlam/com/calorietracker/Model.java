@@ -21,12 +21,14 @@ import java.util.Date;
 public class Model implements Serializable{
     ArrayList<Day> listOfDays;
     Date currentDate;
+    User user;
     public Model(){
         listOfDays = new ArrayList<>();
         currentDate = new Date();
         if(newDay(currentDate)){
             listOfDays.add(new Day());
         }
+        user = new User();
     }
 
 
