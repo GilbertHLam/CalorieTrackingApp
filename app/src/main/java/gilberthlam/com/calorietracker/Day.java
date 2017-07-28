@@ -10,6 +10,7 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.SimpleTimeZone;
 
@@ -24,9 +25,27 @@ public class Day implements Serializable{
 
     public Day() {
         currentDate = new Date();
+        Calendar cal1 = Calendar.getInstance();
+        cal1.setTime(currentDate);
+        cal1.set(Calendar.HOUR_OF_DAY, 0);
+        cal1.set(Calendar.MINUTE, 0);
+        cal1.set(Calendar.SECOND, 0);
+        cal1.set(Calendar.MILLISECOND, 0);
+        currentDate = cal1.getTime();
         format = new SimpleDateFormat("MMMM dd yyyy");
         listOfFoods = new ArrayList<>();
-        Log.d("done", "shit");
+    }
+    public Day(Date setDay) {
+        currentDate = setDay;
+        Calendar cal1 = Calendar.getInstance();
+        cal1.setTime(currentDate);
+        cal1.set(Calendar.HOUR_OF_DAY, 0);
+        cal1.set(Calendar.MINUTE, 0);
+        cal1.set(Calendar.SECOND, 0);
+        cal1.set(Calendar.MILLISECOND, 0);
+        currentDate = cal1.getTime();
+        format = new SimpleDateFormat("MMMM dd yyyy");
+        listOfFoods = new ArrayList<>();
     }
     public String getDate(){
         return(format.format(currentDate));

@@ -47,40 +47,6 @@
         android:layout_toStartOf="@+id/dateLabel"
         android:textSize="18sp" />
 
-    <ListView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/listView"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:background="@android:color/transparent"
-        android:layout_above="@+id/addButton"
-        android:layout_below="@+id/backButton" />
-
-    <Button
-        android:text="Previous"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        style="@style/Widget.AppCompat.Button.Small"
-        android:background="@android:color/transparent"
-        android:id="@+id/backButton"
-        android:layout_alignBaseline="@+id/dateLabel"
-        android:layout_alignBottom="@+id/dateLabel"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <Button
-        android:text="Next"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/nextButton"
-        android:background="@android:color/transparent"
-        style="@style/Widget.AppCompat.Button.Small"
-        android:layout_alignBaseline="@+id/dateLabel"
-        android:layout_alignBottom="@+id/dateLabel"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
-
     <TextView
         android:text="July 7 2017"
         android:layout_width="wrap_content"
@@ -98,9 +64,30 @@
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
         android:id="@+id/imageButton"
-        android:layout_above="@+id/backButton"
+        android:layout_above="@+id/dateButton"
         android:adjustViewBounds="false"
         android:scaleType="fitCenter"
         android:background="@android:color/transparent" />
+
+    <ListView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/listView"
+        android:background="@android:color/transparent"
+        android:layout_below="@+id/dateButton"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_above="@+id/addButton" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/Widget.AppCompat.Button.Small"
+        android:background="@android:drawable/ic_menu_my_calendar"
+        android:id="@+id/dateButton"
+        android:layout_alignBaseline="@+id/dateLabel"
+        android:layout_alignBottom="@+id/dateLabel"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
 </RelativeLayout>

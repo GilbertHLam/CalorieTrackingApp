@@ -1,5 +1,6 @@
 package gilberthlam.com.calorietracker;
 
+import android.app.DatePickerDialog;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -14,6 +15,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,21 +26,15 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 
-import java.io.ByteArrayOutputStream;
-import java.io.FileDescriptor;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-
-import static android.provider.ContactsContract.CommonDataKinds.Website.URL;
 
 public class MainActivity extends FragmentActivity {
     private GestureDetector gestureDetector;
@@ -55,8 +51,7 @@ public class MainActivity extends FragmentActivity {
     TextView date;
     TextView calories;
     DialogEdit d = new DialogEdit();
-    Button previous;
-    Button next;
+    Button dateButton;
     Foods selectedFood;
     AdapterFood adbFood;
     ArrayList<Foods> myListItems;
@@ -74,47 +69,52 @@ public class MainActivity extends FragmentActivity {
         calories = (TextView) findViewById(R.id.totalCalLabel);
         loadData();
         currentDay = model.getToday();
+        Log.d("ONLOAD", "" + currentDay.currentDate.toString());
 
 
-        previous = (Button) findViewById(R.id.backButton);
-        next = (Button) findViewById(R.id.nextButton);
+        dateButton = (Button) findViewById(R.id.dateButton);
         if(!todaysDate.getDate().equals(currentDay.getDate())){
             model.addDay();
             saveData();
             editInfo();
         }
         verifyButtonVisibility();
+        final Calendar myCalendar = Calendar.getInstance();
 
+        final DatePickerDialog.OnDateSetListener date1 = new DatePickerDialog.OnDateSetListener() {
 
-        previous.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onDateSet(DatePicker view, int year, int monthOfYear,
+                                  int dayOfMonth) {
+                // TODO Auto-generated method stub
+                myCalendar.set(Calendar.YEAR, year);
+                myCalendar.set(Calendar.MONTH, monthOfYear);
+                myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+                myCalendar.set(Calendar.HOUR_OF_DAY, 0);
+                myCalendar.set(Calendar.MINUTE, 0);
+                myCalendar.set(Calendar.SECOND, 0);
+                myCalendar.set(Calendar.MILLISECOND, 0);
+                Log.i("set",""+myCalendar.getTime());
+                Log.i("set",""+currentDay.currentDate.toString());
+                if(model.getSelectedDay(myCalendar.getTime()) == null)
+                    model.addSetDay(myCalendar.getTime());
+                currentDay = model.getSelectedDay(myCalendar.getTime());
+                saveData();
+                editInfo();
+            }
+
+        };
+
+        dateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.i("currentday prev", ""+model.listOfDays.indexOf(currentDay));
-                currentDay  = model.listOfDays.get(model.listOfDays.indexOf(currentDay)-1);
-                Log.i("currentday prev", ""+model.listOfDays.indexOf(currentDay));
-                loadData();
-                editInfo();
-                verifyButtonVisibility();
+                new DatePickerDialog(MainActivity.this, date1, myCalendar
+                        .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
+                        myCalendar.get(Calendar.DAY_OF_MONTH)).show();
             }
         });
-        next.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Log.i("currentday prev", ""+model.listOfDays.indexOf(currentDay));
-                currentDay  = model.listOfDays.get(model.listOfDays.indexOf(currentDay)+1);
-                Log.i("currentday prev", ""+model.listOfDays.indexOf(currentDay));
-                loadData();
-                editInfo();
-                verifyButtonVisibility();
-            }
-        });
-        date.setText(currentDay.getDate());
 
-        myListItems = currentDay.listOfFoods;
-        adbFood = new AdapterFood(this, 0, myListItems);
-        listView.setAdapter(adbFood);
-
-        calories.setText("" + currentDay.calculateTotalCalories());
+        editInfo();
 
 
         listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() { //list is my listView
@@ -124,11 +124,7 @@ public class MainActivity extends FragmentActivity {
                 Log.i("selected",pos+"");
                 selectedFood = currentDay.getListOfFoods().get(pos);
                 Log.i("food",selectedFood.getName());
-
                 d.show(getFragmentManager(),"");
-
-
-
                 return true;
             }
         });
@@ -250,15 +246,6 @@ public class MainActivity extends FragmentActivity {
                 fis.close();
 
 
-
-                Log.i("Load","LOAD SUCCESSFUL");
-                for(int i = 0; i < model.listOfDays.size();i++) {
-                    Log.i("Daysize", model.listOfDays.get(i).getDate());
-                    for (int x = 0; x < model.listOfDays.get(i).listOfFoods.size(); x++) {
-                        Log.i("Dayfood", model.listOfDays.get(i).getDate()+":"+model.listOfDays.get(i).getListOfFoods().get(x).getName());
-                    }
-                }
-
             }catch(IOException e) {
                 model = new Model();
             }catch (ClassNotFoundException e) {
@@ -284,18 +271,7 @@ public class MainActivity extends FragmentActivity {
     }
 
     public void verifyButtonVisibility(){
-        if(model.listOfDays.indexOf(currentDay) == 0) {
-            previous.setVisibility(View.INVISIBLE);
-        }
-        else {
-            previous.setVisibility(View.VISIBLE);
-        }
-        if(model.listOfDays.indexOf(currentDay) == (model.listOfDays.size()-1)) {
-            next.setVisibility(View.INVISIBLE);
-        }
-        else {
-            next.setVisibility(View.VISIBLE);
-        }
+        dateButton.setVisibility(View.VISIBLE);
     }
 
     private void onLeftSwipe() {
