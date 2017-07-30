@@ -31,9 +31,7 @@
         android:layout_alignBaseline="@+id/totalCalLabel"
         android:layout_alignBottom="@+id/totalCalLabel"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignLeft="@+id/nextButton"
-        android:layout_alignStart="@+id/nextButton" />
+        android:layout_alignParentEnd="true" />
 
     <TextView
         android:text="Total Calories: "

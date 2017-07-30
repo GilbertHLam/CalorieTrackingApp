@@ -42,25 +42,32 @@ public class DialogEdit extends DialogFragment {
                 if(editMode) {
                     selectedFood.setName(name.getText().toString());
                     selectedFood.setCalorie(Integer.parseInt(cals.getText().toString()));
-                    ((MainActivity) main).listView.setAdapter(((MainActivity) main).adbFood);
-                    ((MainActivity) main).calories.setText("" + ((MainActivity) main).currentDay.calculateTotalCalories());
+                    ((MainActivity) main).editInfo();
                     ((MainActivity) main).saveData();
                 } else {
-                    ((MainActivity) main).addFood(((MainActivity) main).currentDay, new Foods(name.getText().toString(),Integer.parseInt(cals.getText().toString())));
-                    ((MainActivity) main).listView.setAdapter(((MainActivity) main).adbFood);
-                    ((MainActivity) main).calories.setText("" + ((MainActivity) main).currentDay.calculateTotalCalories());
+                    selectedFood.setName(name.getText().toString());
+                    selectedFood.setCalorie(Integer.parseInt(cals.getText().toString()));
+                    ((MainActivity) main).editInfo();
                     ((MainActivity) main).saveData();
                 }
             }
         });
         builder.setNegativeButton("Delete", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
+                if(editMode) {
                     selectedDay.listOfFoods.remove(selectedFood);
                     ((MainActivity) main).adbFood.notifyDataSetChanged();
-                    ((MainActivity) main).listView.setAdapter(((MainActivity) main).adbFood);
-                    ((MainActivity) main).calories.setText("" + ((MainActivity) main).currentDay.calculateTotalCalories());
+                    ((MainActivity) main).editInfo();
                     ((MainActivity) main).saveData();
                     DialogEdit.this.getDialog().cancel();
+                }
+                else {
+                    selectedDay.listOfFoods.remove(selectedFood);
+                    ((MainActivity) main).adbFood.notifyDataSetChanged();
+                    ((MainActivity) main).editInfo();
+                    ((MainActivity) main).saveData();
+                    DialogEdit.this.getDialog().cancel();
+                }
 
             }
         });

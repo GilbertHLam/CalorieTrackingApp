@@ -199,8 +199,7 @@ public class MainActivity extends FragmentActivity {
                                         //Adding food today!
                                         addFood(currentDay, new Foods(tempFood, caloriesTemp));
 
-                                        listView.setAdapter(adbFood);
-                                        calories.setText("" + currentDay.calculateTotalCalories());
+                                        editInfo();
                                         saveData();
                                     } catch (ArrayIndexOutOfBoundsException e) {
                                         Toast t = Toast.makeText(getApplicationContext(),
@@ -279,7 +278,7 @@ public class MainActivity extends FragmentActivity {
         adbFood = new AdapterFood(this, 0, myListItems);
         listView.setAdapter(adbFood);
         date.setText(currentDay.getDate());
-        calories.setText("" + currentDay.calculateTotalCalories());
+        calories.setText("" + currentDay.calculateTotalCalories() + "/" + model.user.goal);
     }
 
     public void verifyButtonVisibility(){

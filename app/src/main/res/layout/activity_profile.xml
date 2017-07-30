@@ -28,21 +28,23 @@
         android:inputType="number"
         android:ems="10"
         android:layout_below="@+id/profileLabel"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
         android:layout_marginTop="17dp"
         android:id="@+id/calInput"
-        android:hint="Calorie Goal" />
+        android:hint="Calorie Goal"
+        android:layout_toRightOf="@+id/calLabel"
+        android:layout_alignRight="@+id/profileLabel"
+        android:layout_alignEnd="@+id/profileLabel" />
 
     <Button
         android:text="Suggest Goal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignTop="@+id/calInput"
-        android:layout_toRightOf="@+id/calInput"
         android:id="@+id/suggestButton"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:layout_toRightOf="@+id/calInput"
+        android:layout_toEndOf="@+id/calInput" />
 
     <Button
         android:text="Save"
@@ -51,39 +53,6 @@
         android:id="@+id/saveButton"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="number"
-        android:ems="10"
-        android:id="@+id/ageInput"
-        android:hint="Age"
-        android:layout_below="@+id/calInput"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="number"
-        android:ems="10"
-        android:id="@+id/heightInput"
-        android:hint="Height (cm)"
-        android:layout_below="@+id/ageInput"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="number"
-        android:ems="10"
-        android:layout_below="@+id/heightInput"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:id="@+id/weightInput"
-        android:hint="Weight (kg)" />
 
     <TextView
         android:text="PROFILE"
@@ -164,5 +133,84 @@
             android:id="@+id/loseButton"  />
 
     </RadioGroup>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:ems="10"
+        android:id="@+id/ageInput"
+        android:hint="Age"
+        android:layout_below="@+id/calInput"
+        android:layout_toRightOf="@+id/calLabel"
+        android:layout_toEndOf="@+id/calLabel" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:ems="10"
+        android:id="@+id/weightInput"
+        android:hint="Weight (kg)"
+        android:layout_below="@+id/heightInput"
+        android:layout_toRightOf="@+id/textView3"
+        android:layout_toEndOf="@+id/textView3" />
+
+    <TextView
+        android:text="Weight (kg):"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView4"
+        android:textSize="18sp"
+        android:layout_alignBaseline="@+id/weightInput"
+        android:layout_alignBottom="@+id/weightInput"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:text="Age:"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView2"
+        android:textSize="18sp"
+        android:layout_alignBaseline="@+id/ageInput"
+        android:layout_alignBottom="@+id/ageInput"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignRight="@+id/textView3"
+        android:layout_alignEnd="@+id/textView3" />
+
+    <TextView
+        android:text="Calorie Goal:"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/calLabel"
+        android:textAppearance="@android:style/TextAppearance.Material.Medium"
+        android:layout_alignBaseline="@+id/suggestButton"
+        android:layout_alignBottom="@+id/suggestButton"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:inputType="number"
+        android:ems="10"
+        android:id="@+id/heightInput"
+        android:hint="Height (cm)"
+        android:layout_below="@+id/ageInput"
+        android:layout_alignLeft="@+id/ageInput"
+        android:layout_alignStart="@+id/ageInput" />
+
+    <TextView
+        android:text="Height (cm):"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView3"
+        android:textSize="18sp"
+        android:layout_alignBaseline="@+id/heightInput"
+        android:layout_alignBottom="@+id/heightInput"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
 </RelativeLayout>
