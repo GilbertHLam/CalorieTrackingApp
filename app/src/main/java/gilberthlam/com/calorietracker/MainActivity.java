@@ -121,6 +121,7 @@ public class MainActivity extends FragmentActivity {
 
             @Override
             public boolean onItemLongClick(AdapterView<?> arg0, View arg1, final int pos, long id) {
+                d.editMode = true;
                 Log.i("selected",pos+"");
                 selectedFood = currentDay.getListOfFoods().get(pos);
                 Log.i("food",selectedFood.getName());
@@ -145,6 +146,17 @@ public class MainActivity extends FragmentActivity {
                             Toast.LENGTH_SHORT);
                     t.show();
                 }
+            }
+        });
+
+        addButton.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                addFood(currentDay, new Foods("",0));
+                selectedFood = currentDay.getListOfFoods().get(currentDay.getListOfFoods().size()-1);
+                d.editMode = false;
+                d.show(getFragmentManager(),"");
+                return true;
             }
         });
         gestureDetector = new GestureDetector(new SwipeGestureDetector());
