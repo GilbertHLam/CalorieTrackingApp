@@ -288,8 +288,10 @@ public class MainActivity extends FragmentActivity {
     private void onLeftSwipe() {
         Toast t = Toast.makeText(MainActivity.this, "Left swipe", Toast.LENGTH_LONG);
         t.show();
-        go = new Intent("test.apps.FLORA");
+        go = new Intent(this, Progress.class);
+        go.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(go);
+        finish();
     }
 
     private void onRightSwipe() {
